@@ -293,7 +293,7 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 					y = dotY - (currentRowFloor-i+(currentRow%1)+0.5)*rowHeight;
 					if( (i-options.placeStarts.from)%options.placeStarts.every === 0 ) {
 						if( i == (currentRowFloor+1) ) { context.globalAlpha = currentRow%1; }
-						context.drawImage( fillTextCache_placeStarts.element, rows[i].indexOf( following )*22*fillTextCache_placeStarts.scale, 0, 22*fillTextCache_placeStarts.scale, 22*fillTextCache_placeStarts.scale, x-11, y-11, 22, 22 );
+						context.drawImage( fillTextCache_placeStarts.element, Math.floor(rows[i].indexOf( following )*22*fillTextCache_placeStarts.scale), 0, Math.floor(22*fillTextCache_placeStarts.scale), Math.floor(22*fillTextCache_placeStarts.scale), x-11, y-11, 22, 22 );
 						if( i == (currentRowFloor+1) ) { context.globalAlpha = 1; }
 					}
 				}
