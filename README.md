@@ -4,6 +4,7 @@ I'll start by assuming you are a bellringer or know what bellringing is.
 # Introduction
 This is a little project to experiment with ways of presenting blue lines and method tutorials (that would traditionally be printed on paper) in a way that takes advantage of the interactivity of modern web browsers and touchscreen devices.
 
+The current results are published at: http://bobwallis.github.io/MethodTutorials/
 
 # How to help
 If you find errors or have suggestions then raise a bug report here, or email me. Here is the list of current bugs and suggestions.
@@ -42,6 +43,6 @@ Once you've created `/src/YourFile.html' add it to the list at the top of `/gulp
 ## Distributing
 The files resulting from the Gulp tasks could be hosted online and accessed with a web browser. You could also use Android's WebView or iOS's UIWebView to load the pages within an app (don't forget to enable Javascript).
 
-I'll maintain a built version of the current project in the `gh-pages` branch of this repository, which automatically publishes it online.
+I'll maintain a built version of the current project in the `gh-pages` branch of this repository, which automatically publishes it online at http://bobwallis.github.io/MethodTutorials/
 
 I'll also integrate the pages into my Android app at some point. I don't have the hardware to produce/test an iOS app, but the pages can be added to the home screen as web applications. If you are interested in creating a native iOS app for this then go ahead, and drop me an email with any issues.

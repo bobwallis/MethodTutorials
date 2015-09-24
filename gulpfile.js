@@ -33,6 +33,7 @@ var hypher       = require( 'gulp-hypher' );
 var h_pattern    = require( 'hyphenation.en-gb' );
 var htmlmin      = require( 'gulp-htmlmin' );
 var sourcemaps   = require( 'gulp-sourcemaps' );
+var ghPages      = require( 'gulp-gh-pages' );
 
 gulp.task('default', ['appicon', 'favicon', 'fonts', 'css', 'js', 'tutorial_html'], function() {
 });
@@ -130,4 +131,10 @@ gulp.task( 'watch', function() {
 	gulp.watch( ['src/css/**/*.less', 'src/css/**/*.css'], ['css'] );
 	gulp.watch( ['src/js/**/*.js'], ['js'] );
 	gulp.watch( ['src/**/*.html'], ['tutorial_html'] );
+} );
+
+
+gulp.task( 'deploy', function() {
+	return gulp.src( DEST+'**/*' )
+		.pipe( ghPages() );
 } );
