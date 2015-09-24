@@ -35,7 +35,7 @@ var htmlmin      = require( 'gulp-htmlmin' );
 var sourcemaps   = require( 'gulp-sourcemaps' );
 var ghPages      = require( 'gulp-gh-pages' );
 
-gulp.task('default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html'], function() {
+gulp.task('default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {
 });
 
 
@@ -125,16 +125,30 @@ gulp.task( 'tutorial_html', function() {
 } );
 
 
+gulp.task( 'index_html', function() {
+	gulp.src( ['src/html/header.html', 'src/html/index.html', 'src/html/footer.html'] )
+		.pipe( concat( 'index.html' ) )
+		.pipe( mustache( { title: 'Method Tutorials', list: tutorials.map( function(m) { return '<li><a href="'+m.html+'">'+m.title+'</a></li>'; } ).join('') } ) )
+		.pipe( hypher( h_pattern ) )
+		.pipe( typogr( { only: ['amp', 'widont', 'caps', 'smartypants'] } ) )
+		.pipe( uglifyInline() )
+		.pipe( htmlmin( { removeComments: true, collapseWhitespace: true } ) )
+		.pipe( gulp.dest( DEST ) )
+		.pipe( gzip() )
+		.pipe( gulp.dest( DEST ) );
+} );
+
+
 gulp.task( 'watch', function() {
 	gulp.watch( ['src/img/appicon.svg'], ['appicon'] );
 	gulp.watch( ['src/img/favicon.*'], ['favicon'] );
 	gulp.watch( ['src/css/**/*.less', 'src/css/**/*.css'], ['css'] );
 	gulp.watch( ['src/js/**/*.js'], ['js'] );
-	gulp.watch( ['src/**/*.html'], ['tutorial_html'] );
+	gulp.watch( ['src/**/*.html'], ['tutorial_html', 'index_html'] );
 } );
 
 
 gulp.task( 'deploy', function() {
-	return gulp.src( DEST+'**/*' )
+	gulp.src( DEST+'**/*' )
 		.pipe( ghPages() );
 } );
