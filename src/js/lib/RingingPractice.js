@@ -352,31 +352,36 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 		};
 
 
-		// Start/restart/oause buttons
+		// Start/restart/pause buttons
 		button_resume.addEventListener( 'click', function() {
-			going = true;
-			button_resume.blur();
-			buttonsContainer.className = 'practice_buttons';
-			pause.className = 'practice_pause visible';
-			controlsContainer.className = 'practice_controls active';
-			if( options.score ) {
-				scoreboard.className = 'practice_scoreboard visible';
+			if( !going ) {
+				going = true;
+				button_resume.blur();
+				buttonsContainer.className = 'practice_buttons';
+				pause.className = 'practice_pause visible';
+				controlsContainer.className = 'practice_controls active';
+				if( options.score ) {
+					scoreboard.className = 'practice_scoreboard visible';
+				}
+				canvas.element.className = 'visible';
+				draw();
 			}
-			canvas.element.className = 'visible';
-			draw();
 		} );
 		button_restart.addEventListener( 'click', function() {
-			going = true;
-			setup();
-			button_restart.blur();
-			buttonsContainer.className = 'practice_buttons';
-			pause.className = 'practice_pause visible';
-			controlsContainer.className = 'practice_controls active';
-			if( options.score ) {
-				scoreboard.className = 'practice_scoreboard visible';
+			console.log(going);
+			if( !going ) {
+				going = true;
+				setup();
+				button_restart.blur();
+				buttonsContainer.className = 'practice_buttons';
+				pause.className = 'practice_pause visible';
+				controlsContainer.className = 'practice_controls active';
+				if( options.score ) {
+					scoreboard.className = 'practice_scoreboard visible';
+				}
+				canvas.element.className = 'visible';
+				draw();
 			}
-			canvas.element.className = 'visible';
-			draw();
 		} );
 		pause.addEventListener( 'click', function() {
 			going = false;
