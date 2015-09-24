@@ -1,0 +1,84 @@
+// Fonts
+@sans-stack: Roboto, Helvetica, "Helvetica Neue", sans-serif;
+@serif-stack: 'Libertine', serif;
+
+// Define base font size. All other sizes relative to this.
+body {
+  font-size: 20px;
+  font-family: @serif-stack;
+}
+
+// Paragraphs
+p {
+  line-height: 1.5em;
+  margin: 1.5em 0 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+
+// Headers
+h1, h2, h3 {
+  font-family: @sans-stack;
+  line-height: 1em;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.5em 0 0;
+}
+h2 {
+  font-size: 1.6em;
+  margin: 0.875em 0 0;
+}
+h3 {
+  font-size: 0.8em;
+  line-height: 1.25em;
+  font-weight: normal;
+  margin: 0.3125em 0;
+}
+
+
+// Lists
+ul {
+  list-style: none;
+  padding-left: 3em;
+  margin: 1.5em 0 0;
+  li {
+    line-height: 1.5em;
+    text-indent: -1em;
+    &:before {
+      content: "–";
+      position:relative;
+      left: -1em;
+    }
+  }
+}
+
+
+// Links
+a {
+  text-decoration: none;
+  text-shadow: .03em 0 #FFF, -.03em 0 #FFF, 0 .03em #FFF, 0 -.03em #FFF, .06em 0 #FFF, -.06em 0 #FFF, .09em 0 #FFF, -.09em 0 #FFF, .12em 0 #FFF, -.12em 0 #FFF, .15em 0 #FFF, -.15em 0 #FFF;
+  background-image: linear-gradient(#FFF, #FFF), linear-gradient(#FFF, #FFF), linear-gradient(#A1C4D0, #A1C4D0);
+  background-size: .05em 1px, .05em 1px, 1px 1px;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  background-position: 0% 99%, 100% 99%, 0% 99%;
+  transition-property: color;
+  transition-duration: .4s;
+  &:link { color: #29404C; }
+  &:visited { color: #4C2940; }
+  &:active { color: #404C29; }
+  &.external {
+    padding-right: 13px;
+    background-image: url(../images/external.svg), linear-gradient(#FFF, #FFF), linear-gradient(#FFF, #FFF), linear-gradient(#A1C4D0, #A1C4D0);
+    background-size: auto, .05em 1px, .05em 1px, 1px 1px;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat-x;
+    background-position: center right, 0% 99%, 100% 99%, 0% 99%;
+  }
+  &::selection {
+    text-shadow: none;
+  }
+}
+
+
