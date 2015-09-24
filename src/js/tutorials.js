@@ -6,7 +6,7 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 	$(window).on( 'orientationchange resize', function() {
 		$( '#viewport' ).attr( 'content',(window.innerWidth < 440)? 'width=440' : 'width=device-width' );
 	} );
-console.log('test');
+	
 	// Enable tabs
 	$( '.tabs' ).each( function( i, v ) {
 		$(v).addClass( 'tabs-'+$( 'li', v ).length );
