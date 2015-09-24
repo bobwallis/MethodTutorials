@@ -35,7 +35,7 @@ var htmlmin      = require( 'gulp-htmlmin' );
 var sourcemaps   = require( 'gulp-sourcemaps' );
 var ghPages      = require( 'gulp-gh-pages' );
 
-gulp.task('default', ['appicon', 'favicon', 'fonts', 'css', 'js', 'tutorial_html'], function() {
+gulp.task('default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html'], function() {
 });
 
 
