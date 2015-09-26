@@ -5,7 +5,8 @@ var tutorials = [
 	}
 ];
 
-var DEST = 'dist/';
+
+var DEST = './dist/';
 
 
 var gulp         = require( 'gulp' );
@@ -31,8 +32,8 @@ var htmlmin      = require( 'gulp-htmlmin' );
 var sourcemaps   = require( 'gulp-sourcemaps' );
 var ghPages      = require( 'gulp-gh-pages' );
 
-gulp.task('default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {
-});
+
+gulp.task('default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {} );
 
 
 gulp.task( 'appicon', function() {
@@ -53,7 +54,6 @@ gulp.task( 'favicon', function() {
 	gulp.src( 'src/img/favicon.ico' )
 		.pipe( gulp.dest( DEST ) );
 } );
-
 
 
 gulp.task( 'fonts', function() {
