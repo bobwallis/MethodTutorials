@@ -29,6 +29,9 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 		if( typeof options.thatsAll !== 'boolean' && typeof options.thatsAll !== 'string' ) {
 			options.thatsAll = false;
 		}
+		if( typeof options.hbIndicator !== 'boolean' ) {
+			options.hbIndicator = false;
+		}
 
 
 		// Sizing
@@ -93,6 +96,38 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 
 
 		// Cache some resuable images to avoid excessive use of fillText
+		if( options.hbIndicator ) {
+			var fillTextCache_hIndicator = ( function() {
+				var cacheCanvas = new Canvas( {
+					id: 'cc1',
+					width: 16,
+					height: 16
+				} );
+				var context = cacheCanvas.context;
+				var hMetrics = MeasureCanvasTextOffset( 16, '12px sans-serif', 'H' );
+				context.fillStyle = '#999';
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
+				context.font = '12px sans-serif';
+				context.fillText( 'H', 8 + hMetrics.x, 8 + hMetrics.y );
+				return cacheCanvas;
+			}() );
+			var fillTextCache_bIndicator = ( function() {
+				var cacheCanvas = new Canvas( {
+					id: 'cc1',
+					width: 16,
+					height: 16
+				} );
+				var context = cacheCanvas.context;
+				var bMetrics = MeasureCanvasTextOffset( 16, '12px sans-serif', 'B' );
+				context.fillStyle = '#999';
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
+				context.font = '12px sans-serif';
+				context.fillText( 'B', 8 + bMetrics.x, 8 + bMetrics.y );
+				return cacheCanvas;
+			}() );
+		}
 		var fillTextCache_placeStarts = ( function() {
 			var x, y;
 			var cacheCanvas = new Canvas( {
@@ -251,7 +286,7 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				goingToPosition = rows[currentRowCeil].indexOf( following );
 
 			// Clear
-			context.clearRect( paddingForLeftMostPosition-8, 0, (stage*bellWidth)+33, canvasHeight );
+			context.clearRect( Math.max(0,paddingForLeftMostPosition-(2*bellWidth)), 0, (stage+3)*bellWidth, canvasHeight );
 
 			// Draw background guides
 			context.strokeStyle = '#BBB';
@@ -287,7 +322,7 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 
 			// Draw place starts
 			if( typeof options.placeStarts === 'object' ) {
-				x = paddingForLeftMostPosition + (stage*bellWidth) + 15;
+				x = paddingForLeftMostPosition + (stage*bellWidth) + 5;
 				y = 1;
 				for( i = going? currentRowCeil : currentRowCeil-(options.thatsAll?1:0); y > 0 && i >= 0; --i ) {
 					y = dotY - (currentRowFloor-i+(currentRow%1)+0.5)*rowHeight;
@@ -310,6 +345,32 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				context.globalAlpha = (currentRow%1 == 0)? 1 : currentRow%1;
 				context.drawImage( fillTextCache_thatsAll.element, 0, y, canvasWidth, 40 );
 				context.globalAlpha = 1;
+			}
+
+			// Handstroke/Backstroke indicator
+			if( options.hbIndicator ) {
+				var toI, fromI;
+				if( currentRowFloor%2 == 0 ) {
+					toI = fillTextCache_hIndicator.element;
+					fromI = fillTextCache_bIndicator.element;
+				}
+				else {
+					fromI = fillTextCache_hIndicator.element;
+					toI = fillTextCache_bIndicator.element;
+				}
+				if( currentRow%1 == 0 ) {
+					context.drawImage( fromI, paddingForLeftMostPosition-bellWidth-8, dotY-8, 16, 16 );
+				}
+				else if( currentRow%1 > 0.66 ) {
+					context.drawImage( toI, paddingForLeftMostPosition-bellWidth-8, dotY-8, 16, 16 );
+				}
+				else {
+					context.globalAlpha = currentRow%1;
+					context.drawImage( fromI, paddingForLeftMostPosition-bellWidth-8, dotY-8, 16, 16 );
+					context.globalAlpha = 1 - (currentRow%1);
+					context.drawImage( toI, paddingForLeftMostPosition-bellWidth-8, dotY-8, 16, 16 );
+					context.globalAlpha = 1;
+				}
 			}
 
 			// Draw the user's dot
