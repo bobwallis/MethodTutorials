@@ -368,7 +368,6 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			}
 		} );
 		button_restart.addEventListener( 'click', function() {
-			console.log(going);
 			if( !going ) {
 				going = true;
 				setup();
