@@ -8,16 +8,9 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 	} );
 	
 	// Enable tabs
-	$( '.tabs' ).each( function( i, v ) {
-		$(v).addClass( 'tabs-'+$( 'li', v ).length );
-	} );
-	$( '.box' )
+	$( '.tabs' )
 		.each( function( i, v ) {
-			v = $(v);
-			if( typeof v.attr( 'data-active' ) !== 'undefined' ) {
-				$( 'li:eq('+v.attr( 'data-active' )+')', v ).addClass( 'active' );
-				$( '> div', v ).not( ':eq('+v.attr( 'data-active' )+')' ).hide();
-			}
+			$(v).addClass( 'tabs-'+$( 'li', v ).length );
 		} )
 		.click( function( e ) {
 			var $target = $( e.target ),
@@ -26,6 +19,14 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 				active = $( 'li', $target.closest( '.tabs' ) ).index( $target );
 			$( 'li', $tabs ).removeClass( 'active' ).eq( active ).addClass( 'active' );
 			$( '> div', $box ).hide().eq( active ).show();
+		} );
+	
+	$( '.box' ).each( function( i, v ) {
+			v = $(v);
+			if( typeof v.attr( 'data-active' ) !== 'undefined' ) {
+				$( 'li:eq('+v.attr( 'data-active' )+')', v ).addClass( 'active' );
+				$( '> div', v ).not( ':eq('+v.attr( 'data-active' )+')' ).hide();
+			}
 		} );
 
 	// Create grids
