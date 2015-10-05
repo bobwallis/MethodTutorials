@@ -10,7 +10,7 @@ define( ['jquery'], function( $ ) {
 		else if( !!window.FontFace ) {
 			// Use the CSS Font Loading Module if it's defined
 			document.fonts.forEach( function(e) {
-				if( e.family == name ) {
+				if( e.family == name || e.family == '"'+name+'"' ) {
 					e.load().then( done, error );
 				}
 			} );
