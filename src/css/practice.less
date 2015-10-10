@@ -97,7 +97,7 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			text-shadow: #FFF 0 0 2px;
+			text-shadow: -1px -1px 1px #FFF, 1px -1px 1px #FFF, -1px 1px 1px #FFF, 1px 1px 1px #FFF;
 		}
 		input {
 			display: inline-block;
@@ -134,6 +134,19 @@
 		&.visible {
 			opacity: 1;
 		}
+	}
+
+	.practice_messages {
+		position: absolute;
+		bottom: 75px;
+		left: 0;
+		width: 100%;
+		box-sizing: border-box;
+		text-align: center;
+		color: #333;
+		font-size: 12px;
+		line-height: 15px;
+		text-shadow: -1px -1px 1px #FFF, 1px -1px 1px #FFF, -1px 1px 1px #FFF, 1px 1px 1px #FFF;
 	}
 
 	.practice_pause {

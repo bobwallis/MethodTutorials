@@ -45,12 +45,6 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 
 		// Create the elements we need to make this all work
 		container.innerHTML = '';
-		var errorFlashes = {};
-		['left', 'down', 'right'].forEach( function( e ) {
-			errorFlashes[e] = document.createElement( 'div' );
-			errorFlashes[e].className = 'practice_errorFlash_'+e;
-			container.appendChild( errorFlashes[e] );
-		} );
 		var control_button = {};
 		var controlsContainer = document.createElement( 'div' );
 		controlsContainer.className = 'practice_controls';
@@ -66,6 +60,21 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			height: canvasHeight
 		} );
 		container.appendChild( canvas.element );
+		var scoreboard = document.createElement( 'div' );
+		scoreboard.className = 'practice_scoreboard';
+		container.appendChild( scoreboard );
+		var messages = document.createElement( 'div' );
+		messages.className = 'practice_messages';
+		container.appendChild( messages );
+		var errorFlashes = {};
+		['left', 'down', 'right'].forEach( function( e ) {
+			errorFlashes[e] = document.createElement( 'div' );
+			errorFlashes[e].className = 'practice_errorFlash_'+e;
+			container.appendChild( errorFlashes[e] );
+		} );
+		var pause = document.createElement( 'div' );
+		pause.className = 'practice_pause';
+		container.appendChild( pause );
 		var buttonsContainer = document.createElement( 'div' );
 		buttonsContainer.className = 'practice_buttons visible';
 		container.appendChild( buttonsContainer );
@@ -87,13 +96,6 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 		button_restart.value = 'Go';
 		button_restart.type = 'button';
 		buttonsContainer.appendChild( button_restart );
-		var scoreboard = document.createElement( 'div' );
-		scoreboard.className = 'practice_scoreboard';
-		container.appendChild( scoreboard );
-		var pause = document.createElement( 'div' );
-		pause.className = 'practice_pause';
-		container.appendChild( pause );
-
 
 		// Cache some resuable images to avoid excessive use of fillText
 		if( options.hbIndicator ) {
