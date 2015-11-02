@@ -7,7 +7,7 @@ This is a little project to experiment with ways of presenting blue lines and me
 The current results are published at: http://bobwallis.github.io/MethodTutorials/
 
 # How to help
-If you find errors or have suggestions then raise a bug report here, or email me. Here is the list of current bugs and suggestions.
+If you find errors or have suggestions then raise a bug report here, or email me.
 
 If you are inspired to write your own guide and contribute it back to the project then please do! If you have the technical knowledge to follow the instructions below then go for it. If you don't then just email me your ideas/tutorials as text and I'll convert them.
 
@@ -17,7 +17,7 @@ If you are inspired to write your own guide and contribute it back to the projec
 If you don't want to use Github then just download a zipped copy of the project to work with, follow the rest of the instructions to set-up the development environment and create your page, then just email me anything you want to contribute. I'll add them here.
 
 ## Github Workflow
-An introduction to what “fork”, “push”, “pull” and “merge” mean in the next sentence is available here. Fork this repository, follow the instructions below to set up the development environment, write pages, (and test them!) then push changes back to your fork and raise a pull request for me to look at and merge into this repository.
+An introduction to what “fork”, “push”, “pull” and “merge” mean in the next sentence is available [here](https://guides.github.com/activities/forking/). Fork this repository, follow the instructions below to set up the development environment, write pages, (and test them!) then push changes back to your fork and raise a pull request for me to look at and merge into this repository.
 
 # Developing
 
@@ -37,7 +37,7 @@ Running `gulp watch` will start a task that watches for changes to source files 
 ## Writing Pages
 Writing pages requires a basic understanding of HTML and Javascript. See the file `/src/Cambridge_Surprise_Minor.html`  for an examples.
 
-Once you've created `/src/YourFile.html' add it to the list at the top of `/gulpfile.json` so that it is covered by the build process.
+Once you've created `/src/YourFile.html` add it to the list at the top of `/gulpfile.json` so that it is covered by the build process.
 
 
 ## Distributing
