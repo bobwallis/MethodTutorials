@@ -26,8 +26,8 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 		if( typeof options.score !== 'boolean' ) {
 			options.score = false;
 		}
-		if( typeof options.instructions !== 'boolean' ) {
-			options.thatsAll = false;
+		if( typeof options.introduction !== 'boolean' ) {
+			options.introduction = false;
 		}
 		if( typeof options.thatsAll !== 'boolean' && typeof options.thatsAll !== 'string' ) {
 			options.thatsAll = false;
