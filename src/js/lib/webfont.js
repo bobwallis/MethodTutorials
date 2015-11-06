@@ -44,5 +44,5 @@ define( ['jquery'], function( $ ) {
 				};
 			checkIfLoaded();
 		}
-	}
+	};
 } );

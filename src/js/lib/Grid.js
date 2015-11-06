@@ -131,8 +131,8 @@ define( ['jquery', './GridOptions', './PlaceNotation', './Canvas', './MeasureCan
 			// Draw numbers
 			if( options.numbers.show ) {
 				// Calculate reused offsets
-				var textMetrics = MeasureCanvasTextOffset( Math.max(bellWidth, rowHeight ), options.numbers.font, '0' ),
-					columnSidePadding = interColumnPadding + columnRightPadding,
+				textMetrics = MeasureCanvasTextOffset( Math.max(bellWidth, rowHeight ), options.numbers.font, '0' );
+				var columnSidePadding = interColumnPadding + columnRightPadding,
 					sidePadding = canvasLeftPadding + (bellWidth/2) + textMetrics.x,
 					topPadding = canvasTopPadding + (rowHeight/2) + textMetrics.y;
 
@@ -289,11 +289,11 @@ define( ['jquery', './GridOptions', './PlaceNotation', './Canvas', './MeasureCan
 
 			// Return the image
 			if( returnImage ) {
-				var i = new Image();
-				i.width = options.dimensions.canvas.width;
-				i.height = options.dimensions.canvas.height;
-				i.src = canvas.element.toDataURL();
-				return i;
+				var im = new Image();
+				im.width = options.dimensions.canvas.width;
+				im.height = options.dimensions.canvas.height;
+				im.src = canvas.element.toDataURL();
+				return im;
 			}
 			else {
 				return canvas.element;
