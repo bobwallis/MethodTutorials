@@ -32,8 +32,11 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 		if( typeof options.thatsAll !== 'boolean' && typeof options.thatsAll !== 'string' ) {
 			options.thatsAll = false;
 		}
-		if( typeof options.hbIndicator !== 'boolean' ) {
-			options.hbIndicator = false;
+		if( typeof options.hbIndicator === 'boolean' ) {
+			options.hbIndicator = options.hbIndicator | 0;
+		}
+		if( options.hbIndicator !== 1 && options.hbIndicator !== -1 ) {
+			options.hbIndicator = 0;
 		}
 
 
@@ -44,6 +47,10 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			rowHeight     = bellWidth,
 			paddingForLeftMostPosition = (canvasWidth - ((stage-1)*bellWidth))/2;
 
+		// Calling clearRect (to clear the canvas after each frame) is surprisingly resource intensive
+		// so we only want to clear the part of the canvas we actually draw on
+		var clearLeft = Math.floor(Math.max(0, paddingForLeftMostPosition - (bellWidth/3))),
+			clearWidth = Math.floor(Math.min((stage-1)*bellWidth + (2*bellWidth/3) + 4, canvasWidth - clearLeft));
 
 		// Clear the container
 		container.innerHTML = '';
@@ -238,6 +245,11 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				context.textBaseline = 'middle';
 				context.font = '12px sans-serif';
 				context.fillText( 'H', 8 + hMetrics.x, 8 + hMetrics.y );
+				// Check if the clearance rectangle needs to be increase
+				if( paddingForLeftMostPosition-bellWidth-8 < clearLeft ) {
+					clearWidth = Math.floor( clearWidth + clearLeft - (paddingForLeftMostPosition-bellWidth-8) );
+					clearLeft = Math.floor( Math.max( 0, paddingForLeftMostPosition-bellWidth-8 ) );
+				}
 				return cacheCanvas;
 			}() );
 			var fillTextCache_bIndicator = ( function() {
@@ -256,7 +268,7 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				return cacheCanvas;
 			}() );
 		}
-		var fillTextCache_placeStarts = ( function() {
+		var fillTextCache_placeStarts = (typeof options.placeStarts === 'object')? ( function() {
 			var x, y;
 			var cacheCanvas = new Canvas( {
 				id: 'cc0',
@@ -281,8 +293,10 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				context.closePath();
 				context.stroke();
 			}
+			// Check if the clearance rectangle needs to be increase
+			clearWidth = Math.floor( Math.max( clearWidth, paddingForLeftMostPosition + (stage*bellWidth) + 16 - clearLeft ) );
 			return cacheCanvas;
-		}() );
+		})() : null;
 		var fillTextCache_guides = (function() {
 			var cacheCanvas = new Canvas( {
 				id: 'cc1',
@@ -316,6 +330,13 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			context.strokeText( 'tap the screen, to navigate.', canvasWidth/2, 40*2/3 );
 			context.fillText( 'Use the arrow keys, or', canvasWidth/2, 40/3 );
 			context.fillText( 'tap the screen, to navigate.', canvasWidth/2, 40*2/3 );
+			// Check if the clearance rectangle needs to be increase
+			var width = context.measureText('tap the screen, to navigate.').width;
+			if( Math.floor((canvasWidth - width)/2) < clearLeft ) {
+				clearWidth = Math.max( width, clearWidth + clearLeft - Math.floor((canvasWidth - width)/2) );
+				clearLeft = Math.floor( Math.max(0, (canvasWidth - width)/2));
+			}
+			clearWidth = Math.floor(Math.min(Math.max(clearWidth, canvasWidth - clearLeft - (canvasWidth-width)/2), canvasWidth - clearLeft));
 			return cacheCanvas;
 		})() : null;
 		var fillTextCache_thatsAll = (options.thatsAll)? (function() {
@@ -341,7 +362,7 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				byRow: [],
 				canvases: []
 			},
-				i = 0,
+				i = 0, width,
 				multiLineMatch = /^(\d+)\-(\d+)$/;
 			for( var prop in options.messages) {
 				prop.split( ',' ).forEach( function( pos ) {
@@ -373,6 +394,13 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				context.strokeText( options.messages[prop], canvasWidth/2, 0 );
 				context.fillText( options.messages[prop], canvasWidth/2, 0 );
 				++i;
+				// See if we need to increase the amount of the canvas to clear to make sure the text is covered
+				width = context.measureText( options.messages[prop] ).width;
+				if( Math.floor((canvasWidth - width)/2) < clearLeft ) {
+					clearWidth = Math.max( width, clearWidth + clearLeft - Math.floor((canvasWidth - width)/2) );
+					clearLeft = Math.floor( Math.max(0, (canvasWidth - width)/2));
+				}
+				clearWidth = Math.floor(Math.min(Math.max(clearWidth, canvasWidth - clearLeft - (canvasWidth-width)/2), canvasWidth - clearLeft));
 			}
 			return m;
 		})();
@@ -453,7 +481,7 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			}
 			// Scroll up the line even if the user isn't moving
 			if( dotY > canvasHeight/2 ) {
-				dotY   = Math.min( canvasHeight - 28 - (fillTextCache_messagesText.byRow.length>0? 20 : 0), Math.max( canvasHeight/2, dotY - Math.max(0.05, (timestamp - previousTimestamp)*(canvasHeight/3000)*Math.pow((dotY-(canvasHeight/2))/(canvasHeight/2), 2) ) ));
+				dotY   = Math.min( canvasHeight - 28 - (fillTextCache_messagesText.byRow.length>0? 20 : 0), Math.max( canvasHeight/2, dotY - Math.max(0.05, (timestamp - previousTimestamp)*(canvasHeight/(rowMoveDuration*10))*Math.pow((dotY-(canvasHeight/2))/(canvasHeight/2), 2) ) ));
 				doDraw = true;
 			}
 			if( doDraw ) { draw(); }
@@ -466,15 +494,12 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 		var draw = function() {
 			var i, j,
 				x, y,
+				comingFromPosition, goingToPosition,
 				currentRowCeil  = Math.ceil( currentRow ),
 				currentRowFloor = Math.floor( currentRow );
 
-			// Reusable position variables
-			var comingFromPosition = rows[currentRowFloor].indexOf( following ),
-				goingToPosition    = rows[currentRowCeil].indexOf( following );
-
 			// Clear
-			context.clearRect( Math.max(0,paddingForLeftMostPosition-(2*bellWidth)), 0, (stage+3)*bellWidth, canvasHeight );
+			context.clearRect( clearLeft, 0, clearWidth, canvasHeight );
 
 			// Draw background guides
 			context.strokeStyle = '#BBB';
@@ -541,9 +566,9 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			}
 
 			// Handstroke/Backstroke indicator
-			if( options.hbIndicator ) {
+			if( options.hbIndicator !== 0 ) {
 				var toI, fromI;
-				if( currentRowFloor%2 === 0 ) {
+				if( ( currentRowFloor%2 === 0 && options.hbIndicator === 1 ) || ( currentRowFloor%2 === 1 && options.hbIndicator === -1 ) ) {
 					toI   = fillTextCache_hIndicator.element;
 					fromI = fillTextCache_bIndicator.element;
 				}
@@ -596,6 +621,8 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			}
 
 			// Draw the user's dot
+			comingFromPosition = rows[currentRowFloor].indexOf( following );
+			goingToPosition    = rows[currentRowCeil].indexOf( following );
 			x = paddingForLeftMostPosition + (bellWidth * ((currentRow == currentRowCeil)? goingToPosition : comingFromPosition + ((currentRow%1)*(goingToPosition - comingFromPosition)) ));
 			y = dotY;
 			context.fillStyle = options.lines[following].color;
