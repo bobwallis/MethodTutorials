@@ -79,7 +79,13 @@
 	.col-wide, .col-narrow {
 		width: @columnWidth * @columns / 2;
 	}
-	.col-wide.center, .col-narrow.center  {
+	.col-wide.center {
+		width: @columnWidth * @columns * 2 / 3;
+	}
+	.col-wide.center  {
+		margin-left: @columnWidth * @columns / 6;
+	}
+	.col-narrow.center  {
 		margin-left: @columnWidth * @columns / 4;
 	}
 }
@@ -136,6 +142,7 @@
 			font-size: 0.6em;
 			line-height: 2.5em;
 			box-sizing: border-box;
+			padding: 0 5px;
 			display: block;
 			float: left;
 			border-right: 1px solid #E1E1E1;
@@ -144,6 +151,9 @@
 			transition-property: background-color, border-color;
 			transition-duration: .2s;
 			cursor: pointer;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 			&:last-child {
 				border-right: 0;
 			}
