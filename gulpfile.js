@@ -2,6 +2,10 @@ var tutorials = [
 	{
 		html:  'Cambridge_Surprise_Minor.html',
 		title: 'Cambridge Surprise Minor'
+	},
+	{
+		html:  'Stedman.html',
+		title: 'Stedman'
 	}
 ];
 
@@ -10,6 +14,7 @@ var DEST = './dist/';
 
 
 var gulp         = require( 'gulp' );
+var plumber      = require( 'gulp-plumber' );
 var rename       = require( 'gulp-rename' );
 var concat       = require( 'gulp-concat');
 var gzip         = require( 'gulp-gzip' );
@@ -23,7 +28,7 @@ var imagemin     = require( 'gulp-imagemin' );
 var requirejs    = require( 'gulp-requirejs' );
 var amdclean     = require( 'gulp-amdclean' );
 var uglify       = require( 'gulp-uglify' );
-var uglifyInline = require( 'gulp-uglify-inline' )
+var uglifyInline = require( 'gulp-uglify-inline' );
 var mustache     = require( 'gulp-mustache' );
 var typogr       = require( 'gulp-typogr' );
 var hypher       = require( 'gulp-hypher' );
@@ -33,7 +38,7 @@ var sourcemaps   = require( 'gulp-sourcemaps' );
 var ghPages      = require( 'gulp-gh-pages' );
 
 
-gulp.task('default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {} );
+gulp.task( 'default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {} );
 
 
 gulp.task( 'appicon', function() {
@@ -64,6 +69,11 @@ gulp.task( 'fonts', function() {
 
 gulp.task( 'css', function() {
 	gulp.src( 'src/css/_.less' )
+		.pipe( plumber( { errorHandler: function ( err ) {
+			console.log(err);
+			this.emit('end');
+			}
+		} ) )
 		.pipe( less() )
 		.pipe( autoprefixer( { browsers: ['last 2 versions'] } ) )
 		.pipe( rename( 'tutorials.css' ) )
@@ -94,6 +104,11 @@ gulp.task( 'js', function() {
 		optimize: 'none',
 		out: 'tutorials.js'
     } )
+		.pipe( plumber( { errorHandler: function ( err ) {
+			console.log(err);
+			this.emit('end');
+			}
+		} ) )
 		.pipe( amdclean.gulp() )
 		.pipe( sourcemaps.init() )
 		.pipe( uglify() )
@@ -107,6 +122,11 @@ gulp.task( 'js', function() {
 gulp.task( 'tutorial_html', function() {
 	var tasks = tutorials.map( function( tutorial ) {
 		return gulp.src( ['src/html/header.html', 'src/'+tutorial.html, 'src/html/footer.html'] )
+			.pipe( plumber( { errorHandler: function ( err ) {
+				console.log(err);
+				this.emit('end');
+				}
+			} ) )
 			.pipe( concat( tutorial.html ) )
 			.pipe( mustache( tutorial ) )
 			.pipe( hypher( h_pattern ) )
@@ -123,6 +143,11 @@ gulp.task( 'tutorial_html', function() {
 
 gulp.task( 'index_html', function() {
 	gulp.src( ['src/html/header.html', 'src/html/index.html', 'src/html/footer.html'] )
+		.pipe( plumber( { errorHandler: function ( err ) {
+			console.log(err);
+			this.emit('end');
+			}
+		} ) )
 		.pipe( concat( 'index.html' ) )
 		.pipe( mustache( { title: 'Method Tutorials', list: tutorials.map( function(m) { return '<li><a href="'+m.html+'">'+m.title+'</a></li>'; } ).join('') } ) )
 		.pipe( hypher( h_pattern ) )
