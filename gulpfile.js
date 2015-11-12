@@ -38,13 +38,27 @@ var sourcemaps   = require( 'gulp-sourcemaps' );
 var ghPages      = require( 'gulp-gh-pages' );
 
 
-gulp.task( 'default', ['appicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {} );
+gulp.task( 'default', ['appicon', 'androidicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {} );
 
 
 gulp.task( 'appicon', function() {
-	var tasks = [70, 76, 120, 150, 152, 180, 192, 310].map( function( size ) {
+	var tasks = [57, 72, 76, 96, 114, 120, 144, 152, 180, 192, 196, 256, 384, 512, 768].map( function( size ) {
 		return gulp.src( 'src/img/appicon.svg' )
 			.pipe( svg2png( size/63 ) )
+			.pipe( imagemin() )
+			.pipe( rename( function( path ) {
+				path.basename += '-'+size;
+			} ) )
+			.pipe( gulp.dest( DEST+'img/' ) );
+	} );
+	return es.merge.apply( null, tasks );
+} );
+
+
+gulp.task( 'androidicon', function() {
+	var tasks = [48, 96, 128, 144, 192, 256, 384, 512].map( function( size ) {
+		return gulp.src( 'src/img/androidicon.svg' )
+			.pipe( svg2png( size/192 ) )
 			.pipe( imagemin() )
 			.pipe( rename( function( path ) {
 				path.basename += '-'+size;
@@ -85,7 +99,7 @@ gulp.task( 'css', function() {
 
 
 gulp.task( 'img', function() {
-	gulp.src( ['src/img/favicon.svg', 'src/img/left.svg', 'src/img/down.svg', 'src/img/right.svg', 'src/img/x.svg'] )
+	gulp.src( ['src/img/androidicon.svg', 'src/img/appicon.svg', 'src/img/favicon.svg', 'src/img/left.svg', 'src/img/down.svg', 'src/img/right.svg', 'src/img/x.svg'] )
 		.pipe( imagemin() )
 		.pipe( gulp.dest( DEST+'img/' ) )
 		.pipe( gzip() )
