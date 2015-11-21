@@ -14,11 +14,10 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 		} )
 		.click( function( e ) {
 			var $target = $( e.target ),
-				$box = $target.closest( '.box' ),
 				$tabs = $target.closest( '.tabs' ),
-				active = $( 'li', $target.closest( '.tabs' ) ).index( $target );
+				active = $( 'li', $tabs ).index( $target );
 			$( 'li', $tabs ).removeClass( 'active' ).eq( active ).addClass( 'active' );
-			$( '> div', $box ).hide().eq( active ).show();
+			$( '> div', $target.closest( '.box' ) ).hide().eq( active ).show();
 		} );
 	
 	$( '.box' ).each( function( i, v ) {
@@ -31,7 +30,6 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 
 	// Create grids
 	var createGrids = function() {
-		var windowWidth = $(window).width();
 		for( var id in bluelines ) {
 			var grid = Grid( $.extend( {
 				dimensions: {
