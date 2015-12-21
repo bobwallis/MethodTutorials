@@ -70,6 +70,11 @@
 		width: @columnWidth * @columns * 3 / 4;
 		margin: 0 (@columnWidth * @columns / 8);
 	}
+	#wrapper {
+		& > header, & > section, & > footer {
+			padding: 0 0;
+		}
+	}
 }
 
 @media (min-width: @screenTablet) {

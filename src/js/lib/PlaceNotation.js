@@ -1,4 +1,5 @@
 define( function() {
+	var RowArray = typeof window['Uint8Array'] === 'function'? window['Uint8Array'] : window['Array'];
 	var PlaceNotation = {
 		bellToCharMap: ['1','2','3','4','5','6','7','8','9','0','E','T','A','B','C','D','F','G','H','J','K','L'],
 		bellToChar: function( bell ) {
@@ -208,7 +209,7 @@ define( function() {
 			// Parses normalised place notation into permutations
 			var parsed = [],
 				exploded = this.explode( notation ),
-				xPermutation = new Array( stage );
+				xPermutation = new RowArray( stage );
 			// Construct the X permutation for stage
 			for( var i = 0; i < stage; i+=2 ) { xPermutation[i] = i+1; xPermutation[i+1] = i; }
 			if( i-1 === stage ) { xPermutation[i-1] = i-1; }
@@ -222,7 +223,7 @@ define( function() {
 				// Otherwise calculate the permutation
 				else {
 					var stationary = exploded[i].split( '' ).map( this.charToBell ),
-						permutation = new Array( stage ),
+						permutation = new RowArray( stage ),
 						j;
 					// First put in any stationary bells
 					for( j = 0; j < stationary.length; j++ ) {
@@ -230,8 +231,8 @@ define( function() {
 					}
 					// Then 'x' what's left
 					for( j = 0; j < stage; j++ ) {
-						if( typeof( permutation[j] ) === 'undefined' ) {
-							if( typeof( permutation[j+1] ) === 'undefined' && j+1 < stage ) {
+						if( stationary.indexOf( j ) === -1 ) {
+							if( stationary.indexOf( j+1 ) === -1 && j+1 < stage ) {
 								permutation[j] = j+1;
 								permutation[j+1] = j;
 								j++;
@@ -253,7 +254,7 @@ define( function() {
 			return (typeof notation === 'string')? notation.replace( /x/gi, '.x.' ).split( '.' ).filter( function( e ) { return e !== ''; } ) : notation;
 		},
 		rounds: function( stage ) {
-			var row = new Array( stage ), i = stage;
+			var row = new RowArray( stage ), i = stage;
 			while( i-- ) { row[i] = i; }
 			return row;
 		},
@@ -287,7 +288,7 @@ define( function() {
 			}
 			var i = permutation.length,
 				j = row.length;
-			permuted = new Array( j );
+			permuted = new RowArray( j );
 			while( j-- > i ) {
 				permuted[j] = row[j];
 			}

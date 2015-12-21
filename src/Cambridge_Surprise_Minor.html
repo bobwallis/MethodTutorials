@@ -393,7 +393,7 @@
 		<h2>Putting it all together</h2>
 		<p>Now that you know each part of the method, try ringing through a full plain course. Each lead end and half lead is marked.</p>
 	</div>
-	<div class="col-narrow center">
+	<div class="col-wide center">
 		<div class="box">
 			<div class="practice" id="prac_full">
 				<script>practices['prac_full'] = {
@@ -423,66 +423,218 @@
 	<div class="col-full">
 		<h2>Calls</h2>
 		<p>Calls are in theory the same as Plain Bob and are done by swapping the 12 lead end to 14 (Bob) or 1234 (Single), resulting in a bell making 4ths and the front bells either running in/out (in a Bob) or making a place (in a Single).</p>
+		<p>As you have learnt each lead seperately you should hopefully know when the end of the lead is approaching, and be able to use your knowledge of place starts to quickly pick up the line after the call.</p>
+		<h3>Bob</h3>
+		<p>If you are about to make 2nds in the middle of the frontwork, then instead run out and become 3rd place bell (backwork). If you are just coming down from the backwork and about to start 3/4 places down, then run in and pick up 2nds place bell (frontwork). If you are coming to the end of 3/4 places up, then make 4ths instead of the final dodge, become 4ths place bell, and then do 3/4 places down (without the dodge at the start).</p>
 	</div>
 	<div class="col-wide center">
-		<div class="col-group">
-			<div class="col-half">
-				<div class="blueline" id="bl_b">
-					<h4>Bob</h4>
-					<script>bluelines['bl_b'] = {
-						stage: 6,
-						notation: 'x14x36x14x36x14x',
-						startRow: '523164',
-						ruleOffs: { show: true, from: 6, every: 12 },
-						lines: {
-							bells: [
-								{ stroke: '#D11' },
-								{ stroke: '#11D', width: 2 },
-								{ stroke: '#1D1', width: 2 },
-								{ stroke: '#D1D', width: 2 }
-							]
-						},
-						numbers: {
-							bells: [
-								{ color: 'transparent' },
-								{ color: 'transparent' },
-								{ color: 'transparent' },
-								{ color: 'transparent' }
-							]
-						}
-					};</script>
-				</div>
+		<div class="box" data-active="0">
+			<ol class="tabs">
+				<li>Line</li>
+				<li>Practice Out</li>
+				<li>Practice In</li>
+				<li>Practice Make</li>
+			</ol>
+			<div class="blueline" id="bl_b">
+				<script>bluelines['bl_b'] = {
+					stage: 6,
+					notation: 'x12x14x36x14x36x14x12x',
+					startRow: '253164',
+					ruleOffs: { show: true, from: 8, every: 12 },
+					lines: {
+						bells: [
+							{ stroke: '#D11' },
+							{ stroke: '#11D', width: 2 },
+							{ stroke: '#1D1', width: 2 },
+							{ stroke: '#D1D', width: 2 }
+						]
+					},
+					numbers: {
+						bells: [
+							{ color: 'transparent' },
+							{ color: 'transparent' },
+							{ color: 'transparent' },
+							{ color: 'transparent' }
+						]
+					}
+				};</script>
 			</div>
-			<div class="col-half">
-				<div class="blueline" id="bl_s">
-					<h4>Single</h4>
-					<script>bluelines['bl_s'] = {
-						stage: 6,
-						notation: 'x14x36x1234x36x14x',
-						startRow: '523164',
-						ruleOffs: { show: true, from: 6, every: 12 },
-						lines: {
-							bells: [
-								{ stroke: '#D11' },
-								{},
-								{ stroke: '#1D1', width: 2 },
-								{ stroke: '#D1D', width: 2 }
-							]
-						},
-						numbers: {
-							bells: [
-								{ color: 'transparent' },
-								{},
-								{ color: 'transparent' },
-								{ color: 'transparent' }
-							]
-						}
-					};</script>
-				</div>
+			<div class="practice" id="prac_b_out">
+				<script>practices['prac_b_out'] = {
+					title: 'Run Out',
+					stage: 6,
+					notation: 'x12x14x36x14x36x14x12x',
+					following: 1,
+					lines: [
+						{ color: '#D11', width: 2 },
+						{ color: '#11D', width: 4 }
+					],
+					messages: {
+						'0-1': 'Make 2nds',
+						'2-3': 'Lead',
+						'4-5': 'Dodge to finish frontwork',
+						'6': 'Bob!—Hunt to the back instead of 2nds',
+						'8': 'Become 3rds place bell',
+						'7,9-10': 'Hunt to the back',
+						'11-14': 'Double dodge 5/6 up'
+					},
+					placeStarts: { from: 8, every: 24 },
+					ruleOffs: { from: 8, every: 12 },
+					hbIndicator: true,
+					introduction: true,
+					startRow: '253164',
+					finishRow: '463152'
+				};</script>
+			</div>
+			<div class="practice" id="prac_b_in">
+				<script>practices['prac_b_in'] = {
+					title: 'Run In',
+					stage: 6,
+					notation: 'x12x14x36x14x36x14x12x',
+					following: 3,
+					lines: [
+						{ color: '#D11', width: 2 }, {}, {},
+						{ color: '#D1D', width: 4 }
+					],
+					messages: {
+						'0-3': 'Double dodge 5/6 down',
+						'4-5': 'Hunt to 3/4 places down',
+						'6': 'Bob!—Hunt to the front instead',
+						'7-8': 'Hunt to the front',
+						'9': 'Dodge to start frontwork',
+						'10-11': 'Lead',
+						'12-13': 'Make 2nds',
+						'14': 'Dodge'
+					},
+					placeStarts: { from: 8, every: 24 },
+					ruleOffs: { from: 8, every: 12 },
+					hbIndicator: true,
+					introduction: true,
+					startRow: '253164',
+					finishRow: '463152'
+				};</script>
+			</div>
+			<div class="practice" id="prac_b_make">
+				<script>practices['prac_b_make'] = {
+					title: 'Make the Bob',
+					stage: 6,
+					notation: 'x12x14x36x14x36x14x12x',
+					following: 2,
+					lines: [
+						{ color: '#D11', width: 2 }, {},
+						{ color: '#1D1', width: 4 }
+					],
+					messages: {
+						'0-1': 'Dodge 3/4 up',
+						'2-3,7,10-11': 'Make 4ths',
+						'4-5,8-9,14': 'Make 3rds',
+						'6': 'Bob!—Make 4ths instead of final dodge',
+						'12-13': 'Dodge 3/4 down'
+					},
+					placeStarts: { from: 8, every: 24 },
+					ruleOffs: { from: 8, every: 12 },
+					hbIndicator: true,
+					introduction: true,
+					startRow: '253164',
+					finishRow: '463152'
+				};</script>
 			</div>
 		</div>
 	</div>
 	<div class="col-full">
-		<p>As you have learnt each lead seperately you should hopefully know when the end of the lead is approaching, and be able to use your knowledge of place starts to quickly pick up the line after the call.</p>
+		<h3>Single</h3>
+		<p>If you are just coming down from the backwork and about to start 3/4 places down, then make 3rds (over the bell making 2nds), then turn around and do the backwork again. If you're doing the frontwork then you're unaffected by a single. If you are coming to the end of 3/4 places up, then you make 4ths instead of the final dodge in the same way as in a bob (although both blows in 4ths are over the same bell).</p>
+	</div>
+	<div class="col-wide center">
+		<div class="box" data-active="0">
+			<ol class="tabs">
+				<li>Line</li>
+				<li>Practice Make 3rds</li>
+				<li>Practice Make 4ths</li>
+			</ol>
+			<div class="blueline" id="bl_s">
+				<script>bluelines['bl_s'] = {
+					stage: 6,
+					notation: 'x12x14x36x1234x36x14x12x',
+					startRow: '253164',
+					ruleOffs: { show: true, from: 8, every: 12 },
+					lines: {
+						bells: [
+							{ stroke: '#D11' },
+							{},
+							{ stroke: '#1D1', width: 2 },
+							{ stroke: '#D1D', width: 2 }
+						]
+					},
+					numbers: {
+						bells: [
+							{ color: 'transparent' },
+							{},
+							{ color: 'transparent' },
+							{ color: 'transparent' }
+						]
+					}
+				};</script>
+			</div>
+			<div class="practice" id="prac_s_3rds">
+				<script>practices['prac_s_3rds'] = {
+					title: 'Make 3rds',
+					stage: 6,
+					notation: 'x12x14x36x1234x36x14x12x',
+					following: 3,
+					lines: [
+						{ color: '#D11', width: 2 }, {}, {},
+						{ color: '#D1D', width: 4 }
+					],
+					messages: {
+						'0-3': 'Double dodge 5/6 down',
+						'4-5': 'Hunt to 3/4 places down',
+						'6': 'Bob!—Make 3rds instead',
+						'7': 'Make 3rds',
+						'8-10': 'Hunt back to the back',
+						'11-14': 'Double dodge 5/6 up'
+					},
+					placeStarts: { from: 8, every: 24 },
+					ruleOffs: { from: 8, every: 12 },
+					hbIndicator: true,
+					introduction: true,
+					startRow: '253164',
+					finishRow: '263154'
+				};</script>
+			</div>
+			<div class="practice" id="prac_s_4ths">
+				<script>practices['prac_s_4ths'] = {
+					title: 'Make 4ths',
+					stage: 6,
+					notation: 'x12x14x36x1234x36x14x12x',
+					following: 2,
+					lines: [
+						{ color: '#D11', width: 2 }, {},
+						{ color: '#1D1', width: 4 }
+					],
+					messages: {
+						'0-1': 'Dodge 3/4 up',
+						'2-3,7,10-11': 'Make 4ths',
+						'4-5,8-9,14': 'Make 3rds',
+						'6': 'Bob!—Make 4ths instead of final dodge',
+						'12-13': 'Dodge 3/4 down'
+					},
+					placeStarts: { from: 8, every: 24 },
+					ruleOffs: { from: 8, every: 12 },
+					hbIndicator: true,
+					introduction: true,
+					startRow: '253164',
+					finishRow: '263154'
+				};</script>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section>
+	<div class="col-full">
+		<h2>Conclusion</h2>
+		<p>Hopefully this tutorial has helped with some of the learning so you can make the most of any practical experience you're able to get.</p>
+		<p>After learning Cambridge you may want to try one of the other commonly rung Surprise Minor methods. London and Norwich are good options. Or you may wish to continue the Cambridge theme by learning the other 11 "Cambridge-over" methods in the Standard 42 Surprise Minor.</p>
 	</div>
 </section>

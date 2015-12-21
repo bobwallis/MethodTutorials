@@ -450,6 +450,8 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			else {
 				nextRow = PlaceNotation.apply( notation[(rows.length-1) % notation.length], nextRow );
 				nextPos = nextRow.indexOf( following );
+				console.log(nextRow);
+				console.log(nextPos);
 			}
 		};
 
