@@ -12,12 +12,13 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 		.each( function( i, v ) {
 			$(v).addClass( 'tabs-'+$( 'li', v ).length );
 		} )
-		.click( function( e ) {
+		.on( 'click touchstart', function( e ) {
 			var $target = $( e.target ),
 				$tabs = $target.closest( '.tabs' ),
 				active = $( 'li', $tabs ).index( $target );
 			$( 'li', $tabs ).removeClass( 'active' ).eq( active ).addClass( 'active' );
 			$( '> div', $target.closest( '.box' ) ).hide().eq( active ).show();
+			e.preventDefault(); // This prevents click emulation, so the click event won't fire as well if we're doing a touch event
 		} );
 	
 	$( '.box' ).each( function( i, v ) {
