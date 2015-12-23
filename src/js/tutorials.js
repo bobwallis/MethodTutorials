@@ -15,9 +15,13 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 		.on( 'click touchstart', function( e ) {
 			var $target = $( e.target ),
 				$tabs = $target.closest( '.tabs' ),
+				$box = $target.closest( '.box' ),
 				active = $( 'li', $tabs ).index( $target );
 			$( 'li', $tabs ).removeClass( 'active' ).eq( active ).addClass( 'active' );
-			$( '> div', $target.closest( '.box' ) ).hide().eq( active ).show();
+			$( '> div', $box ).hide().eq( active ).show();
+			window.setTimeout( function() {
+				$box.height( $( '> div', $box ).eq( active ).outerHeight( true )+$tabs.outerHeight( true) );
+			}, 10 );
 			e.preventDefault(); // This prevents click emulation, so the click event won't fire as well if we're doing a touch event
 		} );
 	
@@ -41,6 +45,13 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 			}, bluelines[id] ) );
 			$('#'+id).append( grid.draw() );
 		}
+		window.setTimeout( function() {
+			$( '.box' ).each( function( i, v ) {
+				v = $( v );
+				v.height( v.height() );
+				v.css( 'overflow', 'hidden' );
+			} );
+		}, 10 );
 	};
 	// Defer creation until ithe Blueline font has loaded (but if it fails then load anyway as we'll fallback to the system default)
 	webfont( 'Blueline', createGrids, createGrids );
