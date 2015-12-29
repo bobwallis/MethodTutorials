@@ -1,4 +1,4 @@
-require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation','./lib/webfont'], function( $, Grid, RingingPractice, PlaceNotation, webfont ) {
+require( ['jquery', 'lib/fittext', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation','./lib/webfont'], function( $, fittext, Grid, RingingPractice, PlaceNotation, webfont ) {
 	var bluelines = window['bluelines'],
 		practices = window['practices'];
 
@@ -7,6 +7,9 @@ require( ['jquery', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation'
 		$( '#viewport' ).attr( 'content',(window.innerWidth < 440)? 'width=440' : 'width=device-width' );
 	} );
 	
+	// Scale headers
+	$( 'h1' ).fitText( 1.2, { minFontSize: '32px', maxFontSize: '40px' } );
+
 	// Enable tabs
 	$( '.tabs' )
 		.each( function( i, v ) {
