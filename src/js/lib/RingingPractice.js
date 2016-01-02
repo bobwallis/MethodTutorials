@@ -93,7 +93,6 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 				},
 				error: function() {
 					errorCount++;
-					rowCount++;
 					scoreboard.innerHTML = 'Changes: '+rowCount+'<br/>Errors: '+errorCount;
 				}
 			};
