@@ -13,29 +13,29 @@ var tutorials = [
 var DEST = './dist/';
 
 
-var gulp         = require( 'gulp' );
-var plumber      = require( 'gulp-plumber' );
-var rename       = require( 'gulp-rename' );
-var concat       = require( 'gulp-concat');
-var gzip         = require( 'gulp-gzip' );
-var es           = require( 'event-stream' );
-var svg2png      = require( 'gulp-svg2png' );
-var less         = require( 'gulp-less' );
-var autoprefixer = require( 'gulp-autoprefixer' );
-var minifyCss    = require( 'gulp-minify-css' );
-var uncss        = require( 'gulp-uncss' );
-var imagemin     = require( 'gulp-imagemin' );
-var requirejs    = require( 'gulp-requirejs' );
-var amdclean     = require( 'gulp-amdclean' );
-var uglify       = require( 'gulp-uglify' );
-var uglifyInline = require( 'gulp-uglify-inline' );
-var mustache     = require( 'gulp-mustache' );
-var typogr       = require( 'gulp-typogr' );
-var hypher       = require( 'gulp-hypher' );
-var h_pattern    = require( 'hyphenation.en-gb' );
-var htmlmin      = require( 'gulp-htmlmin' );
-var sourcemaps   = require( 'gulp-sourcemaps' );
-var ghPages      = require( 'gulp-gh-pages' );
+var gulp            = require( 'gulp' );
+var plumber         = require( 'gulp-plumber' );
+var rename          = require( 'gulp-rename' );
+var concat          = require( 'gulp-concat');
+var zopfli          = require( 'gulp-zopfli' );
+var es              = require( 'event-stream' );
+var svg2png         = require( 'gulp-svg2png' );
+var less            = require( 'gulp-less' );
+var autoprefixer    = require( 'gulp-autoprefixer' );
+var minifyCss       = require( 'gulp-minify-css' );
+var uncss           = require( 'gulp-uncss' );
+var imagemin        = require( 'gulp-imagemin' );
+var imagemin_zopfli = require( 'imagemin-zopfli' );
+var requirejs       = require( 'gulp-requirejs' );
+var amdclean        = require( 'gulp-amdclean' );
+var uglify          = require( 'gulp-uglify' );
+var uglifyInline    = require( 'gulp-uglify-inline' );
+var mustache        = require( 'gulp-mustache' );
+var typogr          = require( 'gulp-typogr' );
+var hypher          = require( 'gulp-hypher' );
+var h_pattern       = require( 'hyphenation.en-gb' );
+var htmlmin         = require( 'gulp-htmlmin' );
+var sourcemaps      = require( 'gulp-sourcemaps' );
 
 
 gulp.task( 'default', ['appicon', 'androidicon', 'img', 'favicon', 'fonts', 'css', 'js', 'tutorial_html', 'index_html'], function() {} );
@@ -45,7 +45,7 @@ gulp.task( 'appicon', function() {
 	var tasks = [57, 72, 76, 96, 114, 120, 144, 152, 180, 192, 196, 256, 384, 512, 768].map( function( size ) {
 		return gulp.src( 'src/img/appicon.svg' )
 			.pipe( svg2png( size/63 ) )
-			.pipe( imagemin() )
+			.pipe( imagemin( { use: [imagemin_zopfli()] } ) )
 			.pipe( rename( function( path ) {
 				path.basename += '-'+size;
 			} ) )
@@ -59,7 +59,7 @@ gulp.task( 'androidicon', function() {
 	var tasks = [48, 96, 128, 144, 192, 256, 384, 512].map( function( size ) {
 		return gulp.src( 'src/img/androidicon.svg' )
 			.pipe( svg2png( size/192 ) )
-			.pipe( imagemin() )
+			.pipe( imagemin( { use: [imagemin_zopfli()] } ) )
 			.pipe( rename( function( path ) {
 				path.basename += '-'+size;
 			} ) )
@@ -93,7 +93,7 @@ gulp.task( 'css', function() {
 		.pipe( rename( 'tutorials.css' ) )
 		.pipe( minifyCss( { keepSpecialComments: 0 } ) )
 		.pipe( gulp.dest( DEST+'css/' ) )
-		.pipe( gzip() )
+		.pipe( zopfli() )
 		.pipe( gulp.dest( DEST+'css/' ) );
 } );
 
@@ -102,7 +102,7 @@ gulp.task( 'img', function() {
 	gulp.src( ['src/img/androidicon.svg', 'src/img/appicon.svg', 'src/img/favicon.svg', 'src/img/left.svg', 'src/img/down.svg', 'src/img/right.svg', 'src/img/x.svg'] )
 		.pipe( imagemin() )
 		.pipe( gulp.dest( DEST+'img/' ) )
-		.pipe( gzip() )
+		.pipe( zopfli() )
 		.pipe( gulp.dest( DEST+'img/' ) );
 } );
 
@@ -128,7 +128,7 @@ gulp.task( 'js', function() {
 		.pipe( uglify() )
 		.pipe( sourcemaps.write( '.' ) )
 		.pipe( gulp.dest( DEST+'js/' ) )
-		.pipe( gzip() )
+		.pipe( zopfli() )
 		.pipe( gulp.dest( DEST+'js/' ) );
 } );
 
@@ -148,7 +148,7 @@ gulp.task( 'tutorial_html', function() {
 			.pipe( uglifyInline() )
 			.pipe( htmlmin( { removeComments: true, collapseWhitespace: true } ) )
 			.pipe( gulp.dest( DEST ) )
-			.pipe( gzip() )
+			.pipe( zopfli() )
 			.pipe( gulp.dest( DEST ) );
 	} );
 	return es.merge.apply( null, tasks );
@@ -169,7 +169,7 @@ gulp.task( 'index_html', function() {
 		.pipe( uglifyInline() )
 		.pipe( htmlmin( { removeComments: true, collapseWhitespace: true } ) )
 		.pipe( gulp.dest( DEST ) )
-		.pipe( gzip() )
+		.pipe( zopfli() )
 		.pipe( gulp.dest( DEST ) );
 } );
 
@@ -180,10 +180,4 @@ gulp.task( 'watch', function() {
 	gulp.watch( ['src/css/**/*.less', 'src/css/**/*.css'], ['css'] );
 	gulp.watch( ['src/js/**/*.js'], ['js'] );
 	gulp.watch( ['src/**/*.html'], ['tutorial_html', 'index_html'] );
-} );
-
-
-gulp.task( 'deploy', function() {
-	gulp.src( DEST+'**/*' )
-		.pipe( ghPages() );
 } );

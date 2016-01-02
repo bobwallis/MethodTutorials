@@ -14,8 +14,6 @@
     "gulp-autoprefixer": "^3.0.1",
     "gulp-concat": "^2.6.0",
     "gulp-consolidate": "^0.1.2",
-    "gulp-gh-pages": "^0.5.2",
-    "gulp-gzip": "^1.2.0",
     "gulp-htmlmin": "^1.1.3",
     "gulp-hypher": "^1.0.0",
     "gulp-imagemin": "^2.3.0",
@@ -34,6 +32,8 @@
     "gulp-uncss": "^1.0.2",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.2.4",
-    "hyphenation.en-gb": "^0.2.1"
+    "gulp-zopfli": "^1.0.0",
+    "hyphenation.en-gb": "^0.2.1",
+    "imagemin-zopfli": "^4.1.0"
   }
 }
