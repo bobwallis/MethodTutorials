@@ -20,8 +20,12 @@ require( ['jquery', 'lib/fittext', './lib/Grid', './lib/RingingPractice', './lib
 				$tabs = $target.closest( '.tabs' ),
 				$box = $target.closest( '.box' ),
 				active = $( 'li', $tabs ).index( $target );
+			// Pause the practice interface
+			$( '.practice:visible .practice_pause.visible').click();
+			// Swap the active tab
 			$( 'li', $tabs ).removeClass( 'active' ).eq( active ).addClass( 'active' );
 			$( '> div', $box ).hide().eq( active ).show();
+			// Smoothly resize the box
 			window.setTimeout( function() {
 				$box.height( $( '> div', $box ).eq( active ).outerHeight( true )+$tabs.outerHeight( true) );
 			}, 10 );
