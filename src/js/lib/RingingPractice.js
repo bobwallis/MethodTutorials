@@ -118,13 +118,21 @@ define( ['./PlaceNotation', './Canvas', './MeasureCanvasTextOffset'], function( 
 			var pause = document.createElement( 'div' );
 			pause.className = 'practice_pause';
 			container.appendChild( pause );
-			pause.addEventListener( 'click', function() {
+			pauseFunction = function() {
 				going = false;
 				canvasPaused = true;
 				buttons.show();
 				pauseButton.hide();
 				controls.deactivate();
-			} );
+			};
+			pause.addEventListener( 'click', pauseFunction );
+			if( typeof document.hidden === 'boolean' ) {
+				document.addEventListener( 'visibilitychange', function() {
+					if( document.hidden == true && going ) {
+						pauseFunction();
+					}
+				}, false );
+			}
 			return {
 				element: pause,
 				show: function() { pause.className = 'practice_pause visible'; },
