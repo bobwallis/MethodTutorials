@@ -4,6 +4,10 @@ var tutorials = [
 		title: 'Cambridge Surprise Minor'
 	},
 	{
+		html:  'London_Surprise_Minor.html',
+		title: 'London Surprise Minor'
+	},
+	{
 		html:  'Stedman.html',
 		title: 'Stedman'
 	}
@@ -117,7 +121,7 @@ gulp.task( 'js', function() {
 		},
 		optimize: 'none',
 		out: 'tutorials.js'
-    } )
+	} )
 		.pipe( plumber( { errorHandler: function ( err ) {
 			console.log(err);
 			this.emit('end');
