@@ -26,7 +26,7 @@ var es              = require( 'event-stream' );
 var svg2png         = require( 'gulp-svg2png' );
 var less            = require( 'gulp-less' );
 var autoprefixer    = require( 'gulp-autoprefixer' );
-var minifyCss       = require( 'gulp-minify-css' );
+var cleanCSS        = require( 'gulp-clean-css' );
 var uncss           = require( 'gulp-uncss' );
 var imagemin        = require( 'gulp-imagemin' );
 var imagemin_zopfli = require( 'imagemin-zopfli' );
@@ -95,7 +95,7 @@ gulp.task( 'css', function() {
 		.pipe( less() )
 		.pipe( autoprefixer( { browsers: ['last 2 versions'] } ) )
 		.pipe( rename( 'tutorials.css' ) )
-		.pipe( minifyCss( { keepSpecialComments: 0 } ) )
+		.pipe( cleanCSS( { keepSpecialComments: 0 } ) )
 		.pipe( gulp.dest( DEST+'css/' ) )
 		.pipe( zopfli() )
 		.pipe( gulp.dest( DEST+'css/' ) );
