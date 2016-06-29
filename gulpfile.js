@@ -117,7 +117,13 @@ gulp.task( 'js', function() {
 		include: ['tutorials'],
 		mainConfigFile: 'src/js/tutorials.js',
 		paths: {
-			jquery: 'lib/jquery'
+			jquery: 'lib/jquery',
+			Modernizr: 'lib/modernizr'
+		},
+		shim: {
+			Modernizr: {
+				exports: 'Modernizr'
+			}
 		},
 		optimize: 'none',
 		out: 'tutorials.js'

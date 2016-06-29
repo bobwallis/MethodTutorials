@@ -45,19 +45,21 @@ define( ['jquery', './PlaceNotation', './MeasureCanvasText'], function( $, Place
 			}
 		},
 		placeStarts: {
-			show:  false,
-			font:  '"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif',
+			show: false,
+			showSmallCircle: true,
+			font: '"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif',
 			color: '#000',
-			size:  13,
-			from:  0
+			diameter: 13,
+			width: 1.25,
+			from: 0
 		},
 		callingPositions: {
-			show:  false,
-			font:  '10px sans-serif',
+			show: false,
+			font: '10px sans-serif',
 			color: '#000'
 		},
 		ruleOffs: {
-			show:   false,
+			show: false,
 			stroke: 'rgba(0,0,0,0.4)',
 			dash:   [3,1],
 			width:  1,
@@ -180,8 +182,8 @@ define( ['jquery', './PlaceNotation', './MeasureCanvasText'], function( $, Place
 			left: 0,
 			between: (typeof options.dimensions.column.padding.between === 'number' )? options.dimensions.column.padding.between : ((options.layout.numberOfColumns > 1)? 10 : 0)
 		};
-		options.dimensions.canvas.padding.top += options.title.show? parseInt(options.title.font)*1.2 : 0;
-		options.dimensions.canvas.padding.left += options.sideNotation.show? (function() {
+		options.dimensions.canvas.padding.top += options.title.show? Math.ceil( parseInt( options.title.font )*1.2 ) : 0;
+		options.dimensions.canvas.padding.left += options.sideNotation.show? Math.ceil((function() {
 			var longest = 0, text = '', i;
 			for( i = 0; i < options.sideNotation.text.length; ++i ) {
 				if( options.sideNotation.text[i].length > longest ) {
@@ -189,15 +191,15 @@ define( ['jquery', './PlaceNotation', './MeasureCanvasText'], function( $, Place
 					text = options.sideNotation.text[i];
 				}
 			}
-			return MeasureCanvasText( new Array(text.length + 1).join( '0' ), options.sideNotation.font ) + 4;
-		})() : 0;
+			return MeasureCanvasText( new Array(text.length + 1).join( '0' ), options.sideNotation.font ) + parseInt(options.sideNotation.font)/2;
+		})()) : 0;
 
 		if( options.placeStarts.show ) {
-			options.dimensions.column.padding.right = Math.max( options.dimensions.column.padding.right, 10 + ( options.placeStarts.bells.length * options.placeStarts.size ) );
-			options.dimensions.canvas.padding.top = Math.max( options.dimensions.canvas.padding.top, 1 + options.placeStarts.size - options.dimensions.row.height);
+			options.dimensions.column.padding.right = Math.ceil( Math.max( options.dimensions.column.padding.right, 10 + ( options.placeStarts.bells.length * options.placeStarts.diameter ) ) );
+			options.dimensions.canvas.padding.top = Math.ceil( Math.max( options.dimensions.canvas.padding.top, 1 + options.placeStarts.diameter - options.dimensions.row.height) );
 		}
 		if( options.callingPositions.show ) {
-			options.dimensions.column.padding.right = Math.max( options.dimensions.column.padding.right, 15 );
+			options.dimensions.column.padding.right = Math.ceil( Math.max( options.dimensions.column.padding.right, 15 ) );
 		}
 
 		// Canvas dimensions

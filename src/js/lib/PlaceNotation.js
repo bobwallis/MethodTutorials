@@ -1,47 +1,37 @@
 define( function() {
-	var RowArray = typeof window['Uint8Array'] === 'function'? window['Uint8Array'] : window['Array'];
 	var PlaceNotation = {
-		bellToCharMap: ['1','2','3','4','5','6','7','8','9','0','E','T','A','B','C','D','F','G','H','J','K','L'],
+		bellToCharMap: ['1','2','3','4','5','6','7','8','9','0','E','T','A','B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','U','V','W','Y','Z'],
 		bellToChar: function( bell ) {
 			return PlaceNotation.bellToCharMap[parseInt( bell, 10 )];
 		},
 		charToBell: function( ch ) {
 			var bell = parseInt( ch, 10 );
 			if( isNaN( bell ) || bell === 0 ) {
-				switch( ch ) {
-					case '0': return 9;
-					case 'E': return 10;
-					case 'T': return 11;
-					case 'A': return 12;
-					case 'B': return 13;
-					case 'C': return 14;
-					case 'D': return 15;
-					case 'F': return 16;
-					case 'G': return 17;
-					case 'H': return 18;
-					case 'J': return 19;
-					case 'K': return 20;
-					case 'L': return 21;
-					default: return null;
+				bell = PlaceNotation.bellToCharMap.indexOf( ch );
+				if( bell === -1 ) {
+					return null;
 				}
 			}
-			return --bell;
+			else {
+				--bell;
+			}
+			return bell;
 		},
 		expand: function( notation, stage ) {
 			// Tries to normalise place notation given in abbreviated form into full notation
 			var fullNotation, matches, stageText;
-
-			// If stage isn't given try to guess
-			if( typeof stage === 'undefined' ) {
-				stage = Math.max.apply( Math, notation.split( '' ).map( PlaceNotation.charToBell ) ) + 1;
-			}
-			stageText = PlaceNotation.bellToChar( stage-1 );
 			
 			fullNotation = notation
 				.toUpperCase().replace( /X/g, 'x' ) // Tidy up cases
-				.replace( /[\(\[{<].*[\)\]}>]/, '' ).replace( / FCH.*$/, '' ) // Remove anything inside brackets, or appended fch details
+				.replace( /[\[{<].*[\]}>]/, '' ).replace( / FCH.*$/, '' ) // Remove anything inside (non normal) brackets, or appended fch details
 				.replace( /\.?x\.?/g, 'x' ) // Remove weird input that might mess things up later
 				.trim();
+
+			// If stage isn't given try to guess
+			if( typeof stage === 'undefined' ) {
+				stage = Math.max.apply( Math, notation.replace( /( HL |LH|LE)/g , '' ).split( '' ).map( PlaceNotation.charToBell ) ) + 1;
+			}
+			stageText = PlaceNotation.bellToChar( stage-1 );
 
 			// Deal with notation like 'x1x1x1-2' (After checking for this form we can assume - means x)
 			matches = fullNotation.match( /^([^-]+)-([^-\.,x]+)$/ );
@@ -63,12 +53,12 @@ define( function() {
 
 			// Parse microSiril format notation
 			if( fullNotation.indexOf( ',' ) !== -1 ) {
-				var splitOnComma = fullNotation.split( ',' ).map( function(s) { return s.trim(); } );
+				var splitOnComma = fullNotation.split( ',' ).map( function( s ) { return s.trim(); } );
 				if( splitOnComma.reduce( function( prev, cur ) { // If every block starts with either an & or a +
 					return prev && ( cur.charAt(0) == '&' || cur.charAt(0) == '+' );
 				}, true ) ) {
 					fullNotation = splitOnComma.reduce( function( prev, cur ) { // Expand the symmetrical blocks, keep the asymmetrical ones as they are but remove the +
-						return prev + ((cur.charAt(0) == '&')?  PlaceNotation.expandHalf( cur ) : cur.replace( '+', '' ));
+						return prev + '.' + ((cur.charAt(0) == '&')?  PlaceNotation.expandHalf( cur ) : cur.replace( '+', '' ));
 					}, '' );
 				}
 			}
@@ -165,23 +155,47 @@ define( function() {
 				.replace( /\.+/g, '.' )       // Remove any unecessary doubling up of dots
 				.replace( /\.?x\.?/g, 'x' );  // and any .x.
 
-			// Explode the notation so we can work on each piece individually, the join back together
+			// Explode the notation so we can work on each piece individually, then join back together
 			fullNotation = PlaceNotation.explode( fullNotation ).map( function( piece ) {
 				// Tidy up 'x' on odd stages
-				if( piece == 'x' ) {
+				if( piece === 'x' ) {
 					return (stage % 2 === 0)? 'x' : stageText;
 				}
-				// First sort what we have
-				piece = piece.split( '' ).map( PlaceNotation.charToBell ).sort().map( PlaceNotation.bellToChar ).join( '' );
+				// Work out which places are affected
+				var affected = piece.match( /[A-Z\d]+/g ).join( '' ).split( '' ).map( PlaceNotation.charToBell ).sort( function( a, b ) { return a - b;} );
 				// Then add missing external places
 				// If the first bell is even, prepend a 1
-				if( (PlaceNotation.charToBell( piece.charAt( 0 ) )+1) % 2 === 0 ) {
+				if( (affected[0]+1) % 2 === 0 ) {
 					piece = '1'+piece;
 				}
 				// If stage odd and last bell even, or stage even and last bell odd, append an n
-				if( (stage % 2 === 0) ? ((PlaceNotation.charToBell( piece.charAt( piece.length-1 ) )+1) % 2 !== 0) : ((PlaceNotation.charToBell( piece.charAt( piece.length-1 ) )+1) % 2 === 0) ) {
+				if( (stage % 2 === 0) ? ((affected[affected.length-1]+1) % 2 !== 0) : ((affected[affected.length-1]+1) % 2 === 0) ) {
 					piece = piece + stageText;
 				}
+				// Sort the piece characters numerically
+				// Since we don't want to sort inside '()' (for jump changes), map those from '(abc)' to max(a, b, c) for sorting purposes (keeping
+				// both the original value and the 'sort key').
+				// This is a bit messy because we need to split twice, once from 12(354)6 to ['12', '(354)' '6'],
+				// then again to [['1','2'], '(354)', ['6']], then flatten the array before sorting and joining back to a string.
+				// There's probably a clearer way to do this.
+				piece = [].concat.apply( [],
+					piece.replace( /\(/g, '~(' ).replace( /\)/g, ')~' ).split('~')
+						.filter( function( e ) { return e !== ''; } )
+						.map( function( e ) {
+							if( e.charAt( 0 ) == '(' ) {
+								return { sort: Math.max.apply( Math, e.split( '' ).map( PlaceNotation.charToBell ) ), value: e };
+								}
+							else {
+								return e.split( '' ).map( function( f ) { return { sort: PlaceNotation.charToBell( f ), value: f }; } );
+							}
+						} ) )
+					.sort( function( a, b ) {
+						return a.sort - b.sort;
+					} )
+					.map( function( e ) {
+						return e.value;
+					} )
+					.join( '' );
 				return piece;
 			} ).join( '.' ).replace( /\.?x\.?/g, 'x' );
 
@@ -190,9 +204,9 @@ define( function() {
 		expandHalf: function( notation ) {
 			// Expands a symmetrical block of place notation
 			notation = notation.replace( /^&/, '' );
-			var notationReversed = notation.split( '' ).reverse().join( '' ),
-				firstDot = notationReversed.indexOf( '.' ),
-				firstX = notationReversed.indexOf( 'x' ),
+			var notationReversed = notation.split( '' ).reverse().join( '' ).replace( /\)(.+?)\(/g, function( m, p1 ) { return '('+p1.split( '' ).reverse().join( '' )+')'; } ),
+				firstDot = (notationReversed.indexOf( '.' ) === -1)? 9999 : notationReversed.indexOf( '.' ),
+				firstX = (notationReversed.indexOf( 'x' ) === -1)? 9999 : notationReversed.indexOf( 'x' ),
 				trim;
 			if( firstDot < 0 && firstX < 0 ) {
 				return notation;
@@ -209,7 +223,7 @@ define( function() {
 			// Parses normalised place notation into permutations
 			var parsed = [],
 				exploded = this.explode( notation ),
-				xPermutation = new RowArray( stage );
+				xPermutation = new Array( stage );
 			// Construct the X permutation for stage
 			for( var i = 0; i < stage; i+=2 ) { xPermutation[i] = i+1; xPermutation[i+1] = i; }
 			if( i-1 === stage ) { xPermutation[i-1] = i-1; }
@@ -223,7 +237,7 @@ define( function() {
 				// Otherwise calculate the permutation
 				else {
 					var stationary = exploded[i].split( '' ).map( this.charToBell ),
-						permutation = new RowArray( stage ),
+						permutation = new Array( stage ),
 						j;
 					// First put in any stationary bells
 					for( j = 0; j < stationary.length; j++ ) {
@@ -231,8 +245,8 @@ define( function() {
 					}
 					// Then 'x' what's left
 					for( j = 0; j < stage; j++ ) {
-						if( stationary.indexOf( j ) === -1 ) {
-							if( stationary.indexOf( j+1 ) === -1 && j+1 < stage ) {
+						if( typeof( permutation[j] ) === 'undefined' ) {
+							if( typeof( permutation[j+1] ) === 'undefined' && j+1 < stage ) {
 								permutation[j] = j+1;
 								permutation[j+1] = j;
 								j++;
@@ -254,7 +268,7 @@ define( function() {
 			return (typeof notation === 'string')? notation.replace( /x/gi, '.x.' ).split( '.' ).filter( function( e ) { return e !== ''; } ) : notation;
 		},
 		rounds: function( stage ) {
-			var row = new RowArray( stage ), i = stage;
+			var row = new Array( stage ), i = stage;
 			while( i-- ) { row[i] = i; }
 			return row;
 		},
@@ -288,7 +302,7 @@ define( function() {
 			}
 			var i = permutation.length,
 				j = row.length;
-			permuted = new RowArray( j );
+			permuted = new Array( j );
 			while( j-- > i ) {
 				permuted[j] = row[j];
 			}

@@ -1,4 +1,4 @@
-require( ['jquery', 'lib/fittext', './lib/Grid', './lib/RingingPractice', './lib/PlaceNotation','./lib/webfont'], function( $, fittext, Grid, RingingPractice, PlaceNotation, webfont ) {
+require( ['jquery', 'lib/fittext', 'lib/Grid', 'lib/RingingPractice', 'lib/PlaceNotation','lib/webfont'], function( $, fittext, Grid, RingingPractice, PlaceNotation, webfont ) {
 	var bluelines = window['bluelines'],
 		practices = window['practices'];
 

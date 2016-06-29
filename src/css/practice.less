@@ -53,10 +53,10 @@
 			background-repeat: no-repeat;
 			background-position: center center;
 			&.success {
-				animation: button_success .3s;
+				animation: button_success .075s;
 			}
 			&.error {
-				animation: button_error .3s;
+				animation: button_error .1s;
 			}
 		}
 		.practice_controls_left {
@@ -125,7 +125,7 @@
 
 	.practice_scoreboard {
 		position: absolute;
-		top: 15px;
+		top: 10px;
 		left: 10px;
 		font-size: 10px;
 		line-height: 15px;
@@ -138,13 +138,13 @@
 
 	.practice_pause {
 		position: absolute;
-		top: 0;
-		right: 0;
-		width: 30px;
-		height: 30px;
+		top: 10px;
+		right: 10px;
+		width: 20px;
+		height: 20px;
 		background-repeat: no-repeat;
 		background-position: center center;
-		background-size: 18px;
+		background-size: 30px;
 		background-image: url(../img/x.svg);
 		opacity: 0;
 		transition: opacity 0.5s ease;
@@ -162,7 +162,7 @@
 		width: 100%;
 		height: 100%;
 		&.error {
-			animation: errorFlash .3s;
+			animation: errorFlash .2s;
 		}
 	}
 	.practice_errorFlash_left {
