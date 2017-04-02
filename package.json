@@ -29,7 +29,6 @@
     "gulp-typogr": "^1.0.0",
     "gulp-uglify": "^1.5.3",
     "gulp-uglify-inline": "^0.1.1",
-    "gulp-uncss": "^1.0.5",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.2.4",
     "gulp-zopfli": "^1.0.0",

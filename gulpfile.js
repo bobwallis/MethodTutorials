@@ -27,7 +27,6 @@ var svg2png         = require( 'gulp-svg2png' );
 var less            = require( 'gulp-less' );
 var autoprefixer    = require( 'gulp-autoprefixer' );
 var cleanCSS        = require( 'gulp-clean-css' );
-var uncss           = require( 'gulp-uncss' );
 var imagemin        = require( 'gulp-imagemin' );
 var imagemin_zopfli = require( 'imagemin-zopfli' );
 var requirejs       = require( 'gulp-requirejs' );
