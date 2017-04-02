@@ -46,7 +46,7 @@ gulp.task( 'default', ['appicon', 'androidicon', 'img', 'favicon', 'fonts', 'css
 
 
 gulp.task( 'appicon', function() {
-	var tasks = [57, 72, 76, 96, 114, 120, 144, 152, 180, 192, 196, 256, 384, 512, 768].map( function( size ) {
+	var tasks = [70, 144, 150, 152, 180, 310].map( function( size ) {
 		return gulp.src( 'src/img/appicon.svg' )
 			.pipe( svg2png( size/63 ) )
 			.pipe( imagemin( { use: [imagemin_zopfli()] } ) )
@@ -60,7 +60,7 @@ gulp.task( 'appicon', function() {
 
 
 gulp.task( 'androidicon', function() {
-	var tasks = [48, 96, 128, 144, 192, 256, 384, 512].map( function( size ) {
+	var tasks = [192, 512].map( function( size ) {
 		return gulp.src( 'src/img/androidicon.svg' )
 			.pipe( svg2png( size/192 ) )
 			.pipe( imagemin( { use: [imagemin_zopfli()] } ) )
