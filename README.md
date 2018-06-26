@@ -37,7 +37,7 @@ Running `gulp watch` will start a task that watches for changes to source files 
 ## Writing Pages
 Writing pages requires a basic understanding of HTML and Javascript. See the file `/src/Cambridge_Surprise_Minor.html`  for an examples.
 
-Once you've created `/src/YourFile.html` add it to the list at the top of `/gulpfile.json` so that it is covered by the build process.
+Once you've created `/src/YourFile.html` add it to the list at the top of `/gulpfile.js` so that it is covered by the build process.
 
 
 ## Distributing

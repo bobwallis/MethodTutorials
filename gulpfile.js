@@ -1,5 +1,9 @@
 var tutorials = [
 	{
+		html:  'Cambridge_Surprise_Major.html',
+		title: 'Cambridge Surprise Major'
+	},
+	{
 		html:  'Cambridge_Surprise_Minor.html',
 		title: 'Cambridge Surprise Minor'
 	},
